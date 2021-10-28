@@ -3,8 +3,6 @@ from copy import deepcopy
 
 from numpy.random import normal
 
-DEBUG = False
-
 
 def read_input(n, path="input.txt"):
     """
@@ -56,20 +54,6 @@ def read_count(path="count.txt"):
 def write_count(count, path="count.txt"):
     with open(path, "w") as f:
         f.write(str(count))
-    return
-
-
-def write_game(piece_type, prev_board, board, action):
-    if piece_type == 2:
-        with open("white_games.txt", "a") as f:
-            f.writelines(prev_board+'\n')
-            f.write(str(action)+'\n')
-            f.writelines(board+'\n')
-        return
-    with open("black_games.txt", "a") as f:
-        f.writelines(prev_board+'\n')
-        f.write(str(action)+'\n')
-        f.writelines(board+'\n')
     return
 
 
@@ -438,8 +422,6 @@ class AlphaBeta:
                 _ = go_copy.place_piece(i, j, self.piece_type)
                 go_copy.move_cnt += 1
                 _, cur_score = self.min_agent(go_copy, depth - 1, alpha, beta, "MOVE")
-                if DEBUG:
-                    print("\t"*(4-depth), "Depth: ", depth, " Action checked: ", (i, j), " Heuristic val: ", cur_score, " Max agent")
                 if cur_score > max_score:
                     max_score = cur_score
                     next_action = (i, j)
@@ -462,8 +444,6 @@ class AlphaBeta:
                 _ = go_copy.place_piece(i, j, 3 - self.piece_type)
                 go_copy.move_cnt += 1
                 _, cur_score = self.max_agent(go_copy, depth - 1, alpha, beta, "MOVE")
-                if DEBUG:
-                    print("\t" * (4 - depth), "Depth: ", depth, " Action checked: ", (i, j), " Heuristic val: ", cur_score, " Min agent")
                 if cur_score < min_score:
                     min_score = cur_score
                     next_action = (i, j)
@@ -540,9 +520,6 @@ if __name__ == "__main__":
     prev_action = go.set_board(piece_type, previous_board, board)
     player = AlphaBeta(piece_type)
     action = player.get_action(go, "MOVE" if prev_action != "PASS" else prev_action)
-    if action != "PASS":
-        go.place_piece(action[0], action[1], piece_type)
-    write_game(piece_type, draw_board(prev), draw_board(go.board), action)
     write_output(action)
     write_count(go.move_cnt)
 

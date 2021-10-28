@@ -424,7 +424,6 @@ def judge(n_move, verbose=False):
     go.verbose = verbose
     go.set_board(piece_type, previous_board, board)
     go.n_move = n_move
-    writeDataset(piece_type, board)
     try:
         action, x, y = readOutput()
     except:
@@ -449,18 +448,19 @@ def judge(n_move, verbose=False):
             print('Game end.')
             if result == 0:
                 print('The game is a tie.')
-                writeDataset(piece_type, go.board, "draw")
-                writeDataset(3-piece_type, go.board, "draw")
+                writeDataset(piece_type, go.previous_board, -1, -1)
+                writeDataset(3-piece_type, go.board, -1, -1)
             else:
                 print('The winner is {}'.format('X' if result == 1 else 'O'))
-                writeDataset(piece_type, go.board, valuefunc(go, piece_type))
-                writeDataset(3-piece_type, go.board, valuefunc(go, 3-piece_type))
+                writeDataset(piece_type, go.previous_board, -1, -1, 1.0 if piece_type == result else 0.0)
+                writeDataset(3-piece_type, go.board, -1, -1, 0.0 if piece_type == result else 1.0)
         sys.exit(result)
 
     piece_type = 2 if piece_type == 1 else 1
 
     if action == "PASS":
         go.previous_board = go.board
+    writeDataset(3-piece_type, go.previous_board, x, y)
     writeNextInput(piece_type, go.previous_board, go.board)
 
     sys.exit(0)
