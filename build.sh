@@ -4,28 +4,12 @@ echo "Programming language..."
 command=$(ls|grep my_player)
 py=$([[ $command =~ (^|[[:space:]])"my_player.py"($|[[:space:]]) ]] && echo 'yes' || echo 'no')
 py3=$([[ $command =~ (^|[[:space:]])"my_player3.py"($|[[:space:]]) ]] && echo 'yes' || echo 'no')
-cpp=$([[ $command =~ (^|[[:space:]])"my_player.cpp"($|[[:space:]]) ]] && echo 'yes' || echo 'no')
-c11=$([[ $command =~ (^|[[:space:]])"my_player11.cpp"($|[[:space:]]) ]] && echo 'yes' || echo 'no')
-java=$([[ $command =~ (^|[[:space:]])"my_player.java"($|[[:space:]]) ]] && echo 'yes' || echo 'no')
 if [ "$py" == "yes" ]; then
 	cmd="python my_player.py"
 	echo "PY"
 elif [ "$py3" == "yes" ]; then
     cmd="python3 my_player3.py"
 	echo "PY3"
-elif [ "$cpp" == "yes" ]; then
-	g++ -O2 *.cpp -o exe
-	cmd="./exe"
-	echo "CPP"
-elif [ "$java" == "yes" ]; then
-	javac my_player.java
-	cmd="java my_player"
-	echo "JAVA"
-elif [ "$c11" == "yes" ]; then
-	g++ -std=c++0x -O2 *.cpp -o exe
-	cmd="./exe"
-	echo "11"
-
 else
     echo "ERROR: INVALID FILENAME"
 	exit 1
@@ -34,7 +18,7 @@ fi
 echo ""
 
 prefix="./"
-ta_agent=("random_player") # 1 TA players
+opponent_agent=("random_player")
 surfix=".py"
 
 # play funcion
@@ -98,9 +82,9 @@ echo $(date)
 for i in {0..0} # 1 TA players
 do
     echo ""
-    echo "==Playing with ${ta_agent[i]}=="
+    echo "==Playing with ${opponent_agent[i]}=="
     echo $(date)
-    ta_cmd="python3 $prefix${ta_agent[i]}$surfix"
+    ta_cmd="python3 $prefix${opponent_agent[i]}$surfix"
     black_win_time=0
     white_win_time=0
     black_tie=0
